@@ -1,19 +1,13 @@
-### ArchLinuxARM image builder
+## ArchLinux ARM images and tags
 
-#### Building the `archlinuxarm` image locally
+#### Daily build of Arch Linux ARM base OS:
 
-```sh
-podman build \
-    --arch=arm64 \
-    --tag=ghcr.io/vially/archlinuxarm \
-    --fle=./archlinuxarm.Dockerfile
+```
+ghcr.io/vially/archlinuxarm/base:latest
 ```
 
-#### Building the `archlinuxarm:tarball-latest` image locally
+#### Latest released tarball of Arch Linux ARM:
 
-```sh
-podman build \
-    --arch=arm64 \
-    --tag=ghcr.io/vially/archlinuxarm:tarball-latest \
-    --file=./tarball.Dockerfile
+```
+ghcr.io/vially/archlinuxarm/base:tarball
 ```
