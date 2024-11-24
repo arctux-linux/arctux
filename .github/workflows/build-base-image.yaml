@@ -37,8 +37,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract Docker metadata
-        id: meta
+      - name: Extract Docker metadata (base)
+        id: base-meta
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/base
@@ -46,15 +46,35 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
             type=schedule,pattern={{date 'YYYYMMDD'}}
 
-      - name: Build and push Docker image
-        id: build-and-push-archlinuxarm
+      - name: Build and push Docker image (base)
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ./os/base/Dockerfile
           platforms: linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.base-meta.outputs.tags }}
+          labels: ${{ steps.base-meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Extract Docker metadata (base-devel)
+        id: base-devel-meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/base
+          tags: |
+            type=raw,value=devel,enable={{is_default_branch}}
+            type=schedule,pattern=devel-{{date 'YYYYMMDD'}}
+
+      - name: Build and push Docker image (base-devel)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./os/base-devel/Dockerfile
+          platforms: linux/arm64
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.base-devel-meta.outputs.tags }}
+          labels: ${{ steps.base-devel-meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
