@@ -1,0 +1,3 @@
+[submodule "packages/uboot-radxa-zero-3"]
+	path = packages/uboot-radxa-zero-3
+	url = https://aur.archlinux.org/uboot-radxa-zero-3.git
