@@ -1,0 +1,19 @@
+name: "Add package to repository"
+description: "Add an ArchLinux package to a repository stored on object storage"
+inputs:
+  repository:
+    description: "Repository name"
+    required: true
+  package:
+    description: "Package file"
+    required: true
+  rclone-bucket:
+    description: "Remote rclone bucket"
+    required: true
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.repository }}
+    - ${{ inputs.package }}
+    - ${{ inputs.rclone-bucket }}

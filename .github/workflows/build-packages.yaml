@@ -42,7 +42,12 @@ jobs:
           cd "./packages/${{ matrix.package }}"
           pkgver=$(awk '/^\s*pkgver\s*=/ { print $3 }' .SRCINFO)
           pkgrel=$(awk '/^\s*pkgrel\s*=/ { print $3 }' .SRCINFO)
-          echo "version=${pkgver}-${pkgrel}" >> "$GITHUB_OUTPUT"
+          arch=$(awk '/^\s*arch\s*=/ { print $3 }' .SRCINFO)
+          version="${pkgver}-${pkgrel}"
+          package="${{ matrix.package }}-${version}-${arch}.pkg.tar.xz"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          echo "arch=${arch}" >> "$GITHUB_OUTPUT"
+          echo "package=${package}" >> "$GITHUB_OUTPUT"
 
       - name: Extract Docker metadata
         id: image-meta
@@ -64,3 +69,12 @@ jobs:
           labels: ${{ steps.image-meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Add package to repository
+        uses: ./.github/actions/add-pkg-to-repo
+        env:
+          RCLONE_CONFIG_SECRET: ${{ secrets.RCLONE_CONFIG }}
+        with:
+          repository: "vially"
+          package: /github/workspace/packages/${{ matrix.package }}/${{ steps.pkg-meta.outputs.package }}
+          rclone-bucket: ${{ secrets.RCLONE_BUCKET }}
