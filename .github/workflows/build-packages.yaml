@@ -67,6 +67,7 @@ jobs:
           push: true
           tags: ${{ steps.image-meta.outputs.tags }}
           labels: ${{ steps.image-meta.outputs.labels }}
+          outputs: "type=local,dest=./packages/${{ matrix.package }}"
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
