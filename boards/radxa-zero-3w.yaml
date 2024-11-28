@@ -1,0 +1,11 @@
+name: radxa-zero-3w
+packages:
+  - uboot-radxa-zero-3
+  # TODO(vially): Bring `aic8800-radxa-sdio-dkms` package into this repository
+  # and enable it for Radxa Zero 3W
+  # - aic8800-radxa-sdio-dkms
+partitions:
+  - type: linux
+    start: 32768
+bootloader:
+  type: uboot-rockchip

@@ -8,6 +8,8 @@ on:
         description: Board to build image for
         options:
           - friendlyelec-cm3588-nas
+          - radxa-zero-3e
+          - radxa-zero-3w
 
 env:
   REGISTRY: ghcr.io
