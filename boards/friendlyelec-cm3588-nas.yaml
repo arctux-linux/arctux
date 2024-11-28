@@ -1,0 +1,8 @@
+name: friendlyelec-cm3588-nas
+packages:
+  - uboot-cm3588-nas
+partitions:
+  - type: linux
+    start: 32768
+bootloader:
+  type: uboot-rockchip

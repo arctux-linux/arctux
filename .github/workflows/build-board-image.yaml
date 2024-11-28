@@ -1,0 +1,110 @@
+name: "Build board image"
+on:
+  workflow_dispatch:
+    inputs:
+      board:
+        type: choice
+        required: true
+        description: Board to build image for
+        options:
+          - friendlyelec-cm3588-nas
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME_PREFIX: ${{ github.repository }}/board
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log into registry ${{ env.REGISTRY }}
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract board info metadata
+        id: board-meta
+        run: |
+          cd ./boards/
+          packages="$(yq '.packages | join(" ")' ./${{ github.event.inputs.board }}.yaml)"
+          echo "packages=${packages}" >> "$GITHUB_OUTPUT"
+
+      - name: Extract Docker metadata
+        id: image-meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/${{ github.event.inputs.board }}
+          tags: |
+            type=raw,value=latest
+
+      - name: Generate board Dockerfile
+        run: |
+          cd ./boards/
+          cp Dockerfile Dockerfile.${{ github.event.inputs.board }}
+          echo "RUN pacman -S --noconfirm ${{ steps.board-meta.outputs.packages }}" >> Dockerfile.${{ github.event.inputs.board }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./boards/Dockerfile.${{ github.event.inputs.board }}
+          platforms: linux/arm64
+          push: true
+          tags: ${{ steps.image-meta.outputs.tags }}
+          labels: ${{ steps.image-meta.outputs.labels }}
+          outputs: type=tar,dest=/tmp/archlinux-rootfs.tar
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build raw image
+        run: |
+          cd ./boards/
+          truncate -s 3g ./board.img
+          partitions="$(yq '.partitions[] | to_entries | map(.key + "=" + .value) | join(" ")' ./${{ github.event.inputs.board }}.yaml)"
+          echo -e "label: gpt\n${partitions}" | sfdisk ./board.img
+
+          # Setup root filesystem
+          loop_device=$(sudo losetup --partscan --show --find ./board.img)
+          loop_partition="${loop_device}p1"
+          sudo mkfs.ext4 "$loop_partition"
+          sudo mkdir /mnt/root
+          sudo mount "$loop_partition" /mnt/root
+          sudo tar -xpf /tmp/archlinux-rootfs.tar --directory /mnt/root
+
+          bootloader_type="$(yq .bootloader.type ./${{ github.event.inputs.board }}.yaml)"
+          if [[ "uboot-rockchip" == "$bootloader_type" ]]; then
+            # Install U-Boot bootloader at required offsets:
+            # https://opensource.rock-chips.com/wiki_Boot_option
+            dd if=/mnt/root/boot/idbloader.img of=./board.img seek=64 conv=notrunc
+            dd if=/mnt/root/boot/u-boot.itb of=./board.img seek=16384 conv=notrunc
+          else
+            echo "Unsupported bootloader type: $bootloader_type. Only U-Boot Rockchip bootloader is supported right now."
+            exit 1
+          fi
+
+          sudo umount /mnt/root
+          sudo losetup --detach "$loop_device"
+
+          mv ./board.img ./ArchLinuxARM-${{ github.event.inputs.board }}-latest.img
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ArchLinuxARM-${{ github.event.inputs.board }}-latest.img
+          path: ./boards/ArchLinuxARM-${{ github.event.inputs.board }}-latest.img
