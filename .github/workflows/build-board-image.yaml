@@ -78,13 +78,14 @@ jobs:
       - name: Build raw image
         run: |
           cd ./boards/
+          root_part_index="$(yq '.partitions[] | select(.name == "rootfs") | path | (.[-1] + 1)' "./${{ github.event.inputs.board }}.yaml")"
           truncate -s 3g ./board.img
           partitions="$(yq '.partitions[] | to_entries | map(.key + "=" + .value) | join(" ")' ./${{ github.event.inputs.board }}.yaml)"
-          echo -e "label: gpt\n${partitions}" | sfdisk ./board.img
+          echo -e "label: gpt\nfirst-lba: 34\n${partitions}" | sfdisk ./board.img
 
           # Setup root filesystem
           loop_device=$(sudo losetup --partscan --show --find ./board.img)
-          loop_partition="${loop_device}p1"
+          loop_partition="${loop_device}p${root_part_index}"
           sudo mkfs.ext4 "$loop_partition"
           sudo mkdir /mnt/root
           sudo mount "$loop_partition" /mnt/root

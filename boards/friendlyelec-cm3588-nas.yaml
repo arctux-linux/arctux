@@ -2,7 +2,18 @@ name: friendlyelec-cm3588-nas
 packages:
   - uboot-cm3588-nas
 partitions:
-  - type: b921b045-1df0-41c3-af44-4c6f280d3fae
+  # Warning: U-Boot fails to detect the boot script if the rootfs is not the
+  # first in the partition table.
+  - name: rootfs
+    type: b921b045-1df0-41c3-af44-4c6f280d3fae
     start: 32768
+  - name: loader1
+    type: 8da63339-0007-60c0-c436-083ac8230908
+    start: 64
+    size: 7104
+  - name: loader2
+    type: 8da63339-0007-60c0-c436-083ac8230908
+    start: 16384
+    size: 8192
 bootloader:
   type: uboot-rockchip
