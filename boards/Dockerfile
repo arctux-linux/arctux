@@ -1,5 +1,7 @@
 FROM ghcr.io/vially/archlinuxarm/base:latest
 
+COPY ./boards/sysroot/ /
+
 RUN <<EOF
 cat <<'CFG' >> /etc/pacman.conf
 
