@@ -2,7 +2,7 @@ name: radxa-zero-3e
 packages:
   - uboot-radxa-zero-3
 partitions:
-  - type: linux
+  - type: b921b045-1df0-41c3-af44-4c6f280d3fae
     start: 32768
 bootloader:
   type: uboot-rockchip
