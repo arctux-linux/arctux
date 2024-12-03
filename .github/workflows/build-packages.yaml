@@ -73,8 +73,9 @@ jobs:
       - name: Add package to repository
         uses: ./.github/actions/add-pkg-to-repo
         env:
+          GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
           RCLONE_CONFIG_SECRET: ${{ secrets.RCLONE_CONFIG }}
         with:
-          repository: "vially"
+          repository: "arctux"
           package: /github/workspace/packages/${{ matrix.package }}/${{ steps.pkg-meta.outputs.package }}
           rclone-bucket: ${{ secrets.RCLONE_BUCKET }}
