@@ -69,7 +69,7 @@ jobs:
           push: true
           tags: ${{ steps.image-meta.outputs.tags }}
           labels: ${{ steps.image-meta.outputs.labels }}
-          outputs: type=tar,dest=/tmp/archlinux-rootfs.tar
+          outputs: type=tar,dest=/tmp/arctux-rootfs.tar
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -87,7 +87,7 @@ jobs:
           sudo mkfs.ext4 "$loop_partition"
           sudo mkdir /mnt/root
           sudo mount "$loop_partition" /mnt/root
-          sudo tar -xpf /tmp/archlinux-rootfs.tar --directory /mnt/root
+          sudo tar -xpf /tmp/arctux-rootfs.tar --directory /mnt/root
 
           bootloader_type="$(yq .bootloader.type ./${{ github.event.inputs.board }}.yaml)"
           if [[ "uboot-rockchip" == "$bootloader_type" ]]; then
@@ -103,9 +103,9 @@ jobs:
           sudo umount /mnt/root
           sudo losetup --detach "$loop_device"
 
-          mv ./board.img ./ArchLinuxARM-${{ github.event.inputs.board }}-latest.img
+          mv ./board.img ./arctux-${{ github.event.inputs.board }}-latest.img
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ArchLinuxARM-${{ github.event.inputs.board }}-latest.img
-          path: ./boards/ArchLinuxARM-${{ github.event.inputs.board }}-latest.img
+          name: arctux-${{ github.event.inputs.board }}-latest.img
+          path: ./boards/arctux-${{ github.event.inputs.board }}-latest.img

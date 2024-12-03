@@ -1,4 +1,4 @@
-name: "Build OCI: archlinuxarm/base:tarball"
+name: "Build OCI: arctux/base:tarball"
 on: workflow_dispatch
 
 env:

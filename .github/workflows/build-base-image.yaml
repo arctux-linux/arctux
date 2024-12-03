@@ -1,4 +1,4 @@
-name: "Build OCI: archlinuxarm/base:latest"
+name: "Build OCI: arctux/base:latest"
 
 on:
   workflow_dispatch: {}

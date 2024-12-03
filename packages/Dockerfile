@@ -1,5 +1,5 @@
 ### Build stage ###
-FROM ghcr.io/vially/archlinuxarm/base:devel AS build
+FROM ghcr.io/arctux-linux/arctux/base:devel AS build
 
 COPY <<EOF /etc/makepkg.conf.d/custom-makepkg.conf
 PKGDEST="/pkg"

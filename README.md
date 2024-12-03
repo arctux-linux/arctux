@@ -1,19 +1,19 @@
-## ArchLinux ARM images and tags
+## Arctux Linux images and tags
 
-#### Daily build of Arch Linux ARM base OS:
-
-```
-ghcr.io/vially/archlinuxarm/base:latest
-```
-
-#### Daily build of Arch Linux ARM base OS with development packages (base-devel):
+#### Daily build of Arctux Linux base OS:
 
 ```
-ghcr.io/vially/archlinuxarm/base:devel
+ghcr.io/arctux-linux/arctux/base:latest
 ```
 
-#### Latest released tarball of Arch Linux ARM:
+#### Daily build of Arctux Linux base OS with development packages (base-devel):
 
 ```
-ghcr.io/vially/archlinuxarm/base:tarball
+ghcr.io/arctux-linux/arctux/base:devel
+```
+
+#### Latest released tarball of Arctux Linux:
+
+```
+ghcr.io/arctux-linux/arctux/base:tarball
 ```

@@ -1,5 +1,5 @@
 name: "Add package to repository"
-description: "Add an ArchLinux package to a repository stored on object storage"
+description: "Add a pacman package to a repository stored on object storage"
 inputs:
   repository:
     description: "Repository name"

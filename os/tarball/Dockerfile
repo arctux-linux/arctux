@@ -1,7 +1,7 @@
 FROM scratch
 
-LABEL org.opencontainers.image.source=https://github.com/vially/archlinuxarm
-LABEL org.opencontainers.image.description="Arch Linux ARM: base OS (from tarball release)"
+LABEL org.opencontainers.image.source=https://github.com/arctux-linux/arctux
+LABEL org.opencontainers.image.description="Arctux Linux: base OS (from tarball release)"
 LABEL org.opencontainers.image.licenses=MIT
 
 # This needs to be manually downloaded into the build context directory in

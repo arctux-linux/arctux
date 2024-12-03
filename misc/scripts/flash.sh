@@ -23,7 +23,7 @@ create_rootfs() {
     podman build . \
         --arch=arm64 \
         --no-cache \
-        --tag="ghcr.io/vially/archlinuxarm/board/${board}:latest" \
+        --tag="ghcr.io/arctux-linux/arctux/board/${board}:latest" \
         --output="type=tar,dest=${output_dest}" \
         --file="./boards/${dockerfile}"
 }
@@ -32,7 +32,7 @@ create_image() {
     local board="$1"
     local chroot_dir="./out/chroot"
     local rootfs_tar="./out/rootfs-${board}.tar"
-    local board_img="./out/ArchLinuxARM-${board}.img"
+    local board_img="./out/arctux-${board}.img"
     local board_yaml="./boards/${board}.yaml"
 
     rm "$board_img" || true
@@ -76,7 +76,7 @@ create_image() {
 flash_image() {
     local board="$1"
     local loader_img="./out/MiniLoaderAll.bin"
-    local board_img="./out/ArchLinuxARM-${board}.img"
+    local board_img="./out/arctux-${board}.img"
 
     if ! rkdeveloptool ld >>/dev/null; then
         echo "Unable to find any device in Maskrom mode. Please connect the device in Maskrom mode and retry."
@@ -91,7 +91,7 @@ flash_image() {
 main() {
     local board="$1"
 
-    if [[ ! -f "./out/ArchLinuxARM-${board}.img" ]]; then
+    if [[ ! -f "./out/arctux-${board}.img" ]]; then
         create_image "$board"
     fi
 

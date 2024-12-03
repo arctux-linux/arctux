@@ -49,7 +49,7 @@ build() {
 
   make distclean
   make cm3588-nas-rk3588_defconfig
-  echo 'CONFIG_IDENT_STRING=" Arch Linux ARM"' >> .config
+  echo 'CONFIG_IDENT_STRING=" Arctux Linux"' >> .config
   make "${UBOOT_MAKE_EXTRA[@]}"
 }
 
