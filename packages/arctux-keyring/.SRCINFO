@@ -1,0 +1,18 @@
+pkgbase = arctux-keyring
+	pkgdesc = Arctux Linux PGP keyring
+	pkgver = 20241203
+	pkgrel = 1
+	url = https://arctux.org
+	install = arctux-keyring.install
+	arch = any
+	groups = base-devel
+	license = GPL
+	depends = pacman
+	source = arctux.gpg
+	source = arctux-trusted
+	source = arctux-revoked
+	sha256sums = b4401843f2ee0bb495aba8cf9a33fb1d5e4c435c67c20b9df3e8cd3788fe36be
+	sha256sums = a001666145fc73aa921ef81ecb5335c7fa3f1e3a411a0cb12ee2b6197ec6118b
+	sha256sums = e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+pkgname = arctux-keyring

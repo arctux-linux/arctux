@@ -1,0 +1,13 @@
+#!/bin/bash
+
+post_upgrade() {
+    if usr/bin/pacman-key -l &>/dev/null; then
+        usr/bin/pacman-key --populate arctux
+    fi
+}
+
+post_install() {
+    if [[ -x usr/bin/pacman-key ]]; then
+        post_upgrade
+    fi
+}

@@ -1,0 +1,20 @@
+# Maintainer: Valentin Hăloiu <vially@arctux.org>
+
+pkgname=arctux-keyring
+pkgver=20241203
+pkgrel=1
+pkgdesc='Arctux Linux PGP keyring'
+arch=('any')
+url='https://arctux.org'
+license=('GPL')
+groups=('base-devel')
+install="${pkgname}.install"
+depends=('pacman')
+source=('arctux'{.gpg,-trusted,-revoked})
+sha256sums=('b4401843f2ee0bb495aba8cf9a33fb1d5e4c435c67c20b9df3e8cd3788fe36be'
+            'a001666145fc73aa921ef81ecb5335c7fa3f1e3a411a0cb12ee2b6197ec6118b'
+            'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
+
+package() {
+    install -D -m0644 -t "${pkgdir}"/usr/share/pacman/keyrings/ 'arctux'{.gpg,-trusted,-revoked}
+}
