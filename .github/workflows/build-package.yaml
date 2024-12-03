@@ -1,5 +1,15 @@
-name: "Build packages"
-on: workflow_dispatch
+name: "Build package"
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        type: choice
+        required: true
+        description: Package to build
+        options:
+          - arctux-keyring
+          - uboot-cm3588-nas
+          - uboot-radxa-zero-3
 
 env:
   REGISTRY: ghcr.io
@@ -11,12 +21,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-    strategy:
-      matrix:
-        package:
-          - arctux-keyring
-          - uboot-cm3588-nas
-          - uboot-radxa-zero-3
 
     steps:
       - name: Checkout repository
@@ -38,12 +42,12 @@ jobs:
       - name: Extract package info metadata
         id: pkg-meta
         run: |
-          cd "./packages/${{ matrix.package }}"
+          cd "./packages/${{ github.event.inputs.package }}"
           pkgver=$(awk '/^\s*pkgver\s*=/ { print $3 }' .SRCINFO)
           pkgrel=$(awk '/^\s*pkgrel\s*=/ { print $3 }' .SRCINFO)
           arch=$(awk '/^\s*arch\s*=/ { print $3 }' .SRCINFO)
           version="${pkgver}-${pkgrel}"
-          package="${{ matrix.package }}-${version}-${arch}.pkg.tar.xz"
+          package="${{ github.event.inputs.package }}-${version}-${arch}.pkg.tar.xz"
           echo "version=${version}" >> "$GITHUB_OUTPUT"
           echo "arch=${arch}" >> "$GITHUB_OUTPUT"
           echo "package=${package}" >> "$GITHUB_OUTPUT"
@@ -52,7 +56,7 @@ jobs:
         id: image-meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/${{ matrix.package }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_PREFIX }}/${{ github.event.inputs.package }}
           tags: |
             type=raw,value=${{ steps.pkg-meta.outputs.version }}
             type=raw,value=latest
@@ -60,13 +64,13 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: ./packages/${{ matrix.package }}
+          context: ./packages/${{ github.event.inputs.package }}
           file: ./packages/Dockerfile
           platforms: linux/arm64
           push: true
           tags: ${{ steps.image-meta.outputs.tags }}
           labels: ${{ steps.image-meta.outputs.labels }}
-          outputs: "type=local,dest=./packages/${{ matrix.package }}"
+          outputs: "type=local,dest=./packages/${{ github.event.inputs.package }}"
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -77,5 +81,5 @@ jobs:
           RCLONE_CONFIG_SECRET: ${{ secrets.RCLONE_CONFIG }}
         with:
           repository: "arctux"
-          package: /github/workspace/packages/${{ matrix.package }}/${{ steps.pkg-meta.outputs.package }}
+          package: /github/workspace/packages/${{ github.event.inputs.package }}/${{ steps.pkg-meta.outputs.package }}
           rclone-bucket: ${{ secrets.RCLONE_BUCKET }}
