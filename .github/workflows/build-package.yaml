@@ -8,6 +8,7 @@ on:
         description: Package to build
         options:
           - arctux-keyring
+          - filesystem
           - pacman
           - pacman-mirrorlist
           - uboot-cm3588-nas
