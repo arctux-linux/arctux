@@ -23,3 +23,10 @@ build-pkg-uboot-cm3588-nas:
         --tag=ghcr.io/arctux-linux/arctux/pkg/uboot-cm3588-nas:latest \
         --output=type=local,dest=./packages/uboot-cm3588-nas \
         --file=./packages/Dockerfile
+
+build-pkg-pacman:
+    podman build ./packages/pacman \
+        --arch=arm64 \
+        --tag=ghcr.io/arctux-linux/arctux/pkg/pacman:latest \
+        --output=type=local,dest=./packages/pacman \
+        --file=./packages/Dockerfile
