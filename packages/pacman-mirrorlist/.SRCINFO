@@ -1,0 +1,13 @@
+pkgbase = pacman-mirrorlist
+	pkgdesc = Arctux mirror list for use by pacman
+	pkgver = 20241209
+	pkgrel = 1
+	url = https://www.arctux.org/
+	arch = any
+	groups = base
+	license = GPL-2.0-or-later
+	backup = etc/pacman.d/mirrorlist
+	source = mirrorlist
+	sha256sums = d8775d85b4ad38abeb20a269936a31ba48f509b5ec927da8e2e029674e9440f7
+
+pkgname = pacman-mirrorlist
