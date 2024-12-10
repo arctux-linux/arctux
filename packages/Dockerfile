@@ -4,7 +4,7 @@ FROM ghcr.io/arctux-linux/arctux/base:devel AS build
 COPY <<EOF /etc/makepkg.conf.d/custom-makepkg.conf
 PKGDEST="/pkg"
 BUILDDIR="/builddir"
-SRCDEST="/builddir"
+SRCDEST="/builddir/sources"
 SRCPKGDEST="/builddir"
 # Disable falling back to `sudo`
 PACMAN_AUTH=("bash" "-c" "%c")
