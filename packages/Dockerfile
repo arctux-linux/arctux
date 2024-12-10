@@ -11,6 +11,9 @@ PACMAN_AUTH=("bash" "-c" "%c")
 EOF
 
 RUN --mount=target=/buildctx <<EOF
+# Temporary workaround until this is changed in the base image
+sed -i "s/PKGEXT='.pkg.tar.xz'/PKGEXT='.pkg.tar.zst'/" /etc/makepkg.conf
+
 # Monkey patch `makepkg` to allow building as `root`. This is required because
 # `sudo` is not working properly in a `RUN` instruction when executed by
 # `podman` through `binfmt_misc`: https://stackoverflow.com/a/77354286

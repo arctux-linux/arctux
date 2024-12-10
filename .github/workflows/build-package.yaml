@@ -50,7 +50,7 @@ jobs:
           pkgrel=$(awk '/^\s*pkgrel\s*=/ { print $3 }' .SRCINFO)
           arch=$(awk '/^\s*arch\s*=/ { print $3 }' .SRCINFO)
           version="${pkgver}-${pkgrel}"
-          package="${{ github.event.inputs.package }}-${version}-${arch}.pkg.tar.xz"
+          package="${{ github.event.inputs.package }}-${version}-${arch}.pkg.tar.zst"
           echo "version=${version}" >> "$GITHUB_OUTPUT"
           echo "arch=${arch}" >> "$GITHUB_OUTPUT"
           echo "package=${package}" >> "$GITHUB_OUTPUT"
