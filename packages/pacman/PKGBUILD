@@ -13,7 +13,7 @@
 
 pkgname=pacman
 pkgver=7.0.0.r3.g7736133
-pkgrel=1
+pkgrel=2
 # use annotated tag and patch level commit from release branch (can be empty for no patches)
 _git_tag=7.0.0
 _git_patch_level_commit=77361331ae3864c6ea880e715c5864d59336f275
@@ -70,7 +70,7 @@ sha256sums=('06d082c3ce6f0811ca728515aa82d69d372800bd3ada99f5c445ef9429b6e3a6'
             'b36c4975286f8dea0fc3c64abf52706c31cb6d6e2c05a4983834b5417e23e802'
             '7ea05a9457f3b6b1edd9dc82f8a1231b0b9048e8c0a7e75fb99abb330a304234'
             '04505447a31fde8cb731e6967ff9e06ad23105da436445509090cbcef7dd25be'
-            '2db22789e7efb510ecf0df55235a4655c67b2a8d34055b2906355e641e1c4515'
+            '5b6c93f331d21cedb3c523eec59b1f022d7959be461992ac1da9aa56343c147e'
             'c8760d7ebb6c9817d508c691c67084be251cd9c8811ee1ccf92c1278bad74c1c'
             '59a8bbdc32830c90dbce5ead9f90074a2bb31cd85ec92bc5f92251bb4bcf8a1d')
 
